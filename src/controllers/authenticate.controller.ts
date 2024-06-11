@@ -1,14 +1,9 @@
-import {
-  ConflictException,
-  UnauthorizedException,
-  UsePipes,
-} from "@nestjs/common";
+import { UnauthorizedException, UsePipes } from "@nestjs/common";
 import { Body, Controller, Post } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { compare, hash } from "bcryptjs";
-import { access } from "fs";
-import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
-import { PrismaService } from "src/prisma/prisma.service";
+import { ZodValidationPipe } from "@/pipes/zod-validation-pipe";
+import { PrismaService } from "@/prisma/prisma.service";
 import { z } from "zod";
 
 const authenticateBodySchema = z.object({
