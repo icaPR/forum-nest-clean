@@ -4,7 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import { AuthGuard } from "@nestjs/passport";
 import { CurrentUser } from "@/infra/auth/current-user-decoratort";
 import { TokenPayloadSchema } from "@/infra/auth/jwt.strategy";
-import { PrismaService } from "@/infra/prisma/prisma.service";
+import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 
