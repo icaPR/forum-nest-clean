@@ -1,9 +1,14 @@
-import { ConflictException, UsePipes } from "@nestjs/common";
+import {
+  BadRequestException,
+  ConflictException,
+  UsePipes,
+} from "@nestjs/common";
 import { Body, Controller, Post } from "@nestjs/common";
-import { hash } from "bcryptjs";
-import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
+import { RegisterStudentUseCase } from "@/domain/forum/application/use-cases/register-students";
+import { StudentAlreadyExistsError } from "@/domain/forum/application/use-cases/errors/student-already-exists-error";
+import { Public } from "@/infra/auth/public";
 
 const createAccountBodySchema = z.object({
   name: z.string(),
@@ -14,31 +19,29 @@ const createAccountBodySchema = z.object({
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>;
 
 @Controller()
+@Public()
 export class CreateAccountController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private registerStudentUseCase: RegisterStudentUseCase) {}
   @Post("/accounts")
   @UsePipes(new ZodValidationPipe(createAccountBodySchema))
   async handle(@Body() body: CreateAccountBodySchema) {
     const { name, email, password } = body;
 
-    const userWithSameEmail = await this.prisma.user.findUnique({
-      where: {
-        email,
-      },
+    const result = await this.registerStudentUseCase.handle({
+      name,
+      email,
+      password,
     });
 
-    if (userWithSameEmail) {
-      throw new ConflictException("User with same email already exists");
+    if (result.isLeft()) {
+      const error = result.value;
+
+      switch (error.constructor) {
+        case StudentAlreadyExistsError:
+          throw new ConflictException(error.message);
+        default:
+          throw new BadRequestException(error.message);
+      }
     }
-
-    const hashPassword = await hash(password, 8);
-
-    await this.prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashPassword,
-      },
-    });
   }
 }
