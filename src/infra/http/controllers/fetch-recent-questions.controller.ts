@@ -1,4 +1,4 @@
-import { Get, Query, UseGuards } from "@nestjs/common";
+import { BadRequestException, Get, Query, UseGuards } from "@nestjs/common";
 import { Controller } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { z } from "zod";
@@ -18,7 +18,6 @@ type QueryParamSchema = z.infer<typeof pageQueryParamSchema>;
 const queryValidateSchema = new ZodValidationPipe(pageQueryParamSchema);
 
 @Controller()
-@UseGuards(AuthGuard("jwt"))
 export class FetchRecentQuestionsController {
   constructor(
     private fetchRecentQuestionsUseCase: FetchRecentQuestionsUseCase
@@ -30,8 +29,9 @@ export class FetchRecentQuestionsController {
     });
 
     if (result.isLeft()) {
-      return new Error();
+      throw new BadRequestException();
     }
+
     const questions = result.value.questions;
 
     return { questions: questions.map(QuestionPresenter.toHttp) };
