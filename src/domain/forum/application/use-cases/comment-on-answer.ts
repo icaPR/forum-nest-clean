@@ -4,6 +4,7 @@ import { AnswerRepository } from "../repositories/answers-repository";
 import { AnswerCommentsRepository } from "../repositories/answer-comments-repository";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { Either, left, right } from "@/core/either";
+import { Injectable } from "@nestjs/common";
 
 interface CommentOnAnswerUseCaseReq {
   authorId: string;
@@ -18,6 +19,7 @@ type CommentOnAnswerUseCaseRes = Either<
   ResourceNotFoundError
 >;
 
+@Injectable()
 export class CommentOnAnswerUseCase {
   constructor(
     private answersRepository: AnswerRepository,
