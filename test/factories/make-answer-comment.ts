@@ -3,7 +3,6 @@ import {
   AnswerComment,
   AnswerCommentProps,
 } from "@/domain/forum/enterprise/entities/answer-comment";
-import { CommentProps } from "@/domain/forum/enterprise/entities/comment";
 import { PrismaAnswerCommentMapper } from "@/infra/database/prisma/mappers/prisma-answer-comment-mapper";
 import { PrismaService } from "@/infra/database/prisma/prisma.service";
 
@@ -27,10 +26,10 @@ export function makeAnswerComment(
 }
 
 @Injectable()
-export class CommentFactory {
+export class AnswerCommentFactory {
   constructor(private prisma: PrismaService) {}
   async makePrismaComment(
-    data: Partial<CommentProps> = {}
+    data: Partial<AnswerCommentProps> = {}
   ): Promise<AnswerComment> {
     const answerComment = makeAnswerComment(data);
 

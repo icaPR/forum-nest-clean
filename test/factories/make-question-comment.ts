@@ -1,5 +1,4 @@
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { CommentProps } from "@/domain/forum/enterprise/entities/comment";
 import {
   QuestionComment,
   QuestionCommentProps,
@@ -26,10 +25,10 @@ export function makeQuestionComment(
 }
 
 @Injectable()
-export class CommentFactory {
+export class QuestionCommentFactory {
   constructor(private prisma: PrismaService) {}
   async makePrismaComment(
-    data: Partial<CommentProps> = {}
+    data: Partial<QuestionCommentProps> = {}
   ): Promise<QuestionComment> {
     const questionComment = makeQuestionComment(data);
 
