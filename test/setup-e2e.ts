@@ -2,6 +2,10 @@ import { PrismaClient } from "@prisma/client";
 import { randomUUID } from "node:crypto";
 import "dotenv/config";
 import { execSync } from "node:child_process";
+import { config } from "dotenv";
+
+config({ path: ".env", override: true });
+config({ path: ".env.test", override: true });
 
 const prisma = new PrismaClient();
 
@@ -24,6 +28,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCAdE`);
+  await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`);
   await prisma.$disconnect;
 });
