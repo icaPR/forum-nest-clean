@@ -3,7 +3,6 @@ import { InMemoryStudentsRepository } from "test/repositories/in-memory-students
 import { AuthenticateStudentUseCase } from "./authenticate-student";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
 import { makeStudent } from "test/factories/make-student";
-import { access } from "fs";
 
 let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let fakeHasher: FakeHasher;
@@ -38,16 +37,5 @@ describe("Authenticate student ", async () => {
     expect(result.value).toEqual({
       accessToken: expect.any(String),
     });
-  });
-  it.skip("should hash student password upon registration", async () => {
-    const result = await sut.handle({
-      email: "student@email.com",
-      password: "123456",
-    });
-
-    const hashedPassword = await fakeHasher.hash("123456");
-
-    expect(result.isRight()).toBe(true);
-    expect(inMemoryStudentsRepository.item[0].password).toEqual(hashedPassword);
   });
 });

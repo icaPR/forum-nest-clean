@@ -1,9 +1,9 @@
 import { makeAnswer } from "test/factories/make-answer";
 import { OnAnswerCreated } from "./on-answer-created";
-import { InMemoryAnswerRepository } from "test/repositories/in-memory-answer-repositories";
+import { InMemoryAnswerRepository } from "test/repositories/in-memory-answer-repository";
 import { InMemoryAnswerAttachmentRepository } from "test/repositories/in-memory-answer-attachment-repository";
-import { InMemoryQuestionsRepository } from "test/repositories/in-memory-questions-repositories";
-import { InMemoryQuestionAttachmentRepository } from "test/repositories/in-memory-question-attachment-repositories";
+import { InMemoryQuestionsRepository } from "test/repositories/in-memory-questions-repository";
+import { InMemoryQuestionAttachmentRepository } from "test/repositories/in-memory-question-attachment-repository";
 import {
   SendNotificationUseCase,
   SendNotificationUseCaseReq,

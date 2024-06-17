@@ -1,6 +1,6 @@
-import { InMemoryAnswerRepository } from "test/repositories/in-memory-answer-repositories";
+import { InMemoryAnswerRepository } from "test/repositories/in-memory-answer-repository";
 import { CommentOnAnswerUseCase } from "./comment-on-answer";
-import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comment-repositories";
+import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comment-repository";
 import { makeAnswer } from "test/factories/make-answer";
 import { InMemoryAnswerAttachmentRepository } from "test/repositories/in-memory-answer-attachment-repository";
 

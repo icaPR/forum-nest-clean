@@ -1,4 +1,4 @@
-import { InMemoryAnswerRepository } from "test/repositories/in-memory-answer-repositories";
+import { InMemoryAnswerRepository } from "test/repositories/in-memory-answer-repository";
 import { AnswerQuestionUseCase } from "./answer-question";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { InMemoryAnswerAttachmentRepository } from "test/repositories/in-memory-answer-attachment-repository";
@@ -20,7 +20,7 @@ describe("Create an answer ", async () => {
   it("should be able to create an answer ", async () => {
     const result = await sut.handle({
       questionId: "1",
-      instructorId: "1",
+      authorId: "1",
       content: "Content",
       attachmentsIds: ["1", "2"],
     });
