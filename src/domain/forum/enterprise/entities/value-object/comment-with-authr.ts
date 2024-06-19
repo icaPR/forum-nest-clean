@@ -14,7 +14,7 @@ export class CommentWithAuthor extends ValueObject<CommentWithAuthorProps> {
   get commentId() {
     return this.props.commentId;
   }
-  get comment() {
+  get content() {
     return this.props.content;
   }
   get authorId() {
