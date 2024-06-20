@@ -1,15 +1,66 @@
 import { DomainEvents } from "@/core/events/domain-events";
 import { PaginationParams } from "@/core/repositories/pagination-params";
-import { QuestionAttachmentRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
 import { QuestionsRepository } from "@/domain/forum/application/repositories/questions-repository";
 import { Question } from "@/domain/forum/enterprise/entities/question";
+import { InMemoryAttachmentsRepository } from "./in-memory-attachments-repository";
+import { InMemoryStudentsRepository } from "./in-memory-students-repository";
+import { InMemoryQuestionAttachmentRepository } from "./in-memory-question-attachment-repository";
+import { QuestionDetails } from "@/domain/forum/enterprise/entities/value-object/question-details";
 
 export class InMemoryQuestionsRepository implements QuestionsRepository {
   public item: Question[] = [];
 
   constructor(
-    private questionAttachmentRepository: QuestionAttachmentRepository
+    private questionAttachmentRepository: InMemoryQuestionAttachmentRepository,
+    private attachmentsRepository: InMemoryAttachmentsRepository,
+    private studentsRepository: InMemoryStudentsRepository
   ) {}
+
+  async findDetailsBySlug(slug: string) {
+    const question = this.item.find((item) => item.slug.value === slug);
+
+    if (!question) {
+      throw new Error("Question not found");
+    }
+
+    const author = this.studentsRepository.item.find((student) => {
+      return student.id.equals(question.authorId);
+    });
+
+    if (!author) {
+      throw new Error("Author not found");
+    }
+
+    const questionAttachments = this.questionAttachmentRepository.item.filter(
+      (questionAttachment) => {
+        return questionAttachment.questionId.equals(question.id);
+      }
+    );
+
+    const attachments = questionAttachments.map((questionAttachment) => {
+      const attachment = this.attachmentsRepository.item.find((attachment) => {
+        return attachment.id.equals(questionAttachment.attachmentId);
+      });
+
+      if (!attachment) {
+        throw new Error("attachment not found");
+      }
+
+      return attachment;
+    });
+    return QuestionDetails.create({
+      questionId: question.id,
+      authorId: question.authorId,
+      author: author.name,
+      title: question.title,
+      content: question.content,
+      slug: question.slug,
+      bestAnswerId: question.bestAnswerId,
+      attachments,
+      createdAt: question.createdAt,
+      updatedAt: question.updatedAt,
+    });
+  }
 
   async create(question: Question) {
     this.item.push(question);
